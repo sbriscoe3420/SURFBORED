@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	  <title>surfBOREDent - Find viral videos</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="index.css">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	  <!--SLICK CAROUSEL CSS-->
+	<link rel="stylesheet" type="text/css" href="slick/slick.css"/>
+  	<!-- Add the slick-theme.css if you want default styling -->
+	<link rel="stylesheet" type="text/css" href="slick/slick-theme.css"/>
+
+		
+
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  		
+  		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+
+
+
+
+
+
+<body>
+	<div class="toolbar">
+		<div class="menuButtons">
+			<a href="#">
+				<div><span class="video-icon glyphicon glyphicon-facetime-video"></span></div>
+		</div>
+
+
+
+
+
+			  <img src="surfboredentSmall.jpg" id="surfboredLogo" alt="logo">
+			</a>
+
+
+
+
+
+
+		<div class="socialMedia">
+			<ul>
+				<li class="categoriesLi"><span class="glyphicon glyphicon-arrow-up"></span>Categories</li>
+				<li><i class="fa fa-facebook-official"></i></li>
+				<li><i class="fa fa-instagram"></i></li>
+				<li><i class="fa fa-twitter-square"></i> </li>
+
+			</ul>
+			
+		</div>		
+				        <div style="clear:both;"></div>
+    
+	</div>
+
+
+
+
+
+
+				        <div style="clear:both;"></div>
+
+
+	<div class="promotedVids">
+
+
+	</div>
+
+
+
+
+
+
+
+
+	<div class="mainVideos">
+		<p>Hello world</p>
+	</div>
+
+
+<script src="https://www.gstatic.com/firebasejs/3.6.9/firebase.js"></script>
+<script type="text/javascript" src="slick/slick.min.js"></script>  
+
+<script>
+	$(document).ready(function(){
+		var width = $(window).width();
+		//alert(width);
+		var categoriesArray = [];
+		var counter;
+		// Initialize Firebase
+  		var config = {
+		    apiKey: "AIzaSyDce9HerQ0hJG4f8A9cVFtFr2B7g0rVNH4",
+		    authDomain: "surfbored-d276a.firebaseapp.com",
+		    databaseURL: "https://surfbored-d276a.firebaseio.com",
+		    storageBucket: "surfbored-d276a.appspot.com",
+		    messagingSenderId: "582525741382"
+		  };
+
+		   firebase.initializeApp(config);
+
+
+		   if (width>=1071){
+		   	alert("Desktop");
+		   }
+		   	else if(width>= 950 && width<=1070){
+		   	alert("Laptop");
+		   }else if(width>= 768 && width<=949){
+		   	alert("Tablet");
+		   }else if(width>=500 && width <= 767){
+		   	alert("Mini tablet");
+		   }else if(width<=499){
+		   	alert("Mobile");
+		   }
+		   
+
+
+
+		   //fuction to get first row of promoted videos
+		  var promotedRef = firebase.database().ref("promoted");
+		  	promotedRef.orderByChild('timestamp').limitToFirst(4).on('child_added', snap => {
+
+		  		var promotedTitle 		= snap.child("title").val();
+		  		var promotedThumbnail 	= snap.child("imageURL").val();
+		  		var promotedSource 		= snap.child("author").val();
+		  		var promotedAuthor 		= snap.child("via").val();
+		  		var promotedCategory 	= snap.child("category").val();
+		  		var promotedVidId 		= snap.child("id").val();
+
+
+		  		$(".promotedVids").append('<div id="'+ promotedCategory + "/" + promotedVidId +'" class="vid promoted col-lg-3 col-md-3 col-sm-6 col-xs-12"> <p class="clipped">'+ promotedTitle +
+          '</p><a href="video.php?vid='+ promotedCategory + "/" + promotedVidId +'"><img width="300px" height="189px" data-container="body" title="' + promotedTitle + '"  data-toggle="tooltip" title="' + promotedTitle + '" alt="promotedVideo" class="img-responsive promoImg" src="'+ promotedThumbnail + '"></a>'+
+            '<p><a href="video.php?vid='+ promotedCategory + "/" + promotedVidId +'">@'+ promotedAuthor + '</a> via '+ promotedSource +
+          '</p> </div>')
+
+		  	});//End of Promoted Ref 
+
+
+
+		  	//function to get count of Categories
+
+		  	var counterRef = firebase.database().ref();
+		  		counterRef.on('value', snap => {
+		  			counter = snap.numChildren();
+
+		  		});// end of counterRef
+
+
+
+
+
+
+
+
+
+		  	//fuction to get category titles
+		  	if (counter != 0){
+		  	var categoriesRef = firebase.database().ref();
+		  		categoriesRef.on('child_added', snap => {
+		  			var title = String(snap.key);
+		  			categoriesArray.push(title);
+
+		  		});//end of categories ref.on
+			}//end of if counter != 0
+
+
+	}); //End of Document.ready.function
+
+
+</script>
+
+</body>
+</html>
